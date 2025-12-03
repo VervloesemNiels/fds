@@ -1,0 +1,14 @@
+{
+    "appName": "Thieving analysis",
+    "description": "Tracks thieving procs and same data analysis",
+    "appUrl": "./index.html",
+    "configUrl": "./appconfig.json",
+    "iconUrl": "./images/icon.png",
+    "defaultWidth": 330,
+    "defaultHeight": 551,
+    "minWidth": 330,
+    "minHeight": 108,
+    "requestHandlers": [],
+    "activators": [],
+    "permissions": "pixel,gamestate,overlay"
+}

@@ -1,0 +1,271 @@
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://runeapps.org/nis/nis.css"
+    />
+    <script src="https://www.unpkg.com/alt1/dist/base/index.js"></script>
+    <script src="https://www.unpkg.com/alt1/dist/ocr/index.js"></script>
+    <script src="https://www.unpkg.com/alt1/dist/chatbox/index.js"></script>
+  </head>
+  <style>
+    /* --- Animation Layers --- */
+
+    #xpLayer {
+      position: relative;
+      height: 0;
+      overflow: visible;
+      pointer-events: none;
+
+    }
+
+    .xpFloat {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      color: gold;
+      font-size: 22px;
+      font-weight: bold;
+      text-shadow: 0 0 6px rgba(255,215,0,0.8);
+      opacity: 1;
+      animation: floatUp 1.2s ease-out forwards;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateX(-50%) translateY(0); opacity: 1; }
+      75%  { transform: translateX(-50%) translateY(-25px); opacity: 1; }
+      100% { transform: translateX(-50%) translateY(-45px); opacity: 0; }
+    }
+
+    /* General RuneScape 3 button style */
+    button {
+      font-family: "Verdana", sans-serif;
+      font-weight: bold;
+      padding: 4px 8px;
+      margin: 4;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 110;
+      height: 45;
+    }
+
+    /* Individual button colors */
+    #startBtn {
+      background: linear-gradient(#5cb85c, #4caf50);
+      color: black;
+    }
+
+    #stopBtn {
+      background: linear-gradient(#fdd835, #fbc02d);
+      color: black;
+    }
+
+    #resetBtn {
+      background: linear-gradient(#ff5c5c, #ff4444);
+      color: black;
+    }
+
+    #saveBtn {
+      background: linear-gradient(#42a5f5, #1e88e5);
+      color: black;
+    }    
+  </style>
+
+
+  <body class="nis">
+    <!-- Pop ups fun -->
+    <br>
+      <div id="xpLayer"></div>
+    <br>
+    
+    <!-- Buttons -->
+    <div>
+      <button id="startBtn">Start Timer</button>
+      <button id="stopBtn">Stop Timer</button>
+      <button id="resetBtn">Reset</button>
+      <button id="saveBtn">Save session</button>
+    </div>
+
+    <!-- CLOCK -->
+    <div id="runtimeContainer" style="display:flex; align-items:center; justify-content:center; gap:8px; font-size:22px; font-weight:bold; margin-bottom:12px;">
+      <img src="https://runescape.wiki/images/thumb/Advance_Time_icon.png/60px-Advance_Time_icon.png?eec8d" style="width:28px; height:28px;">
+      <span id="timer">00:00:00.000</span>
+    </div>
+
+    <!-- THIEVING ANALYSIS-->
+    <div style="background:rgba(30,30,30,0.8); padding:10px; border:2px solid #b18b29; border-radius:8px; color:#ffd98a; margin-bottom:15px;">
+      <h3 style="margin:0 0 10px; color:#ffd98a;">
+        <img src="https://runescape.wiki/images/Thieving-icon.png?1fcf2" width="28" style="vertical-align:middle; margin-right:6px;">
+        Thieving Tracker
+      </h3>
+      <table id="procTable" style="width:100%; border-collapse:collapse; text-align:center; table-layout:fixed;">
+        <thead>
+          <tr style="border-bottom:2px solid #b18b29;">
+            <th></th>
+            <th>Total</th>
+            <th><img class="npcIcon" src="https://runescape.wiki/images/Menaphos_market_guard_icon.png?bcb77" width="28"></th>
+            <th><img src="https://runescape.wiki/images/Master_camouflage_head.png?1a3d1" width="28"></th>
+            <th><img src="https://runescape.wiki/images/Agility-icon.png?9a56e" width="28"></th>
+            <th><img src="https://runescape.wiki/images/No_pickpocket_icon.png?608a5" width="28"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+          <td>Count</td>
+          <td id="totalCount">0</td>
+          <td id="normalCount">0</td>
+          <td id="camoCount">0</td>
+          <td id="fastCount">0</td>
+          <td id="failedCount">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  <!-- THIEVING ANALYSIS-->  
+  <div style="background:rgba(30,30,30,0.8); padding:10px; border:2px solid #b18b29; border-radius:8px; color:#ffd98a; margin-bottom:15px;">
+    <h3 style="margin:0 0 10px; color:#ffd98a;">
+      <img src="https://runescape.wiki/images/Thieving-icon.png?1fcf2" width="28" style="vertical-align:middle; margin-right:6px;">
+      Thieving Analysis
+    </h3>
+
+    <table style="width:100%; border-collapse: collapse; text-align:center;">
+      <thead>
+        <tr style="border-bottom:2px solid #b18b29;">
+          <th>Type</th>
+          <th>Actual PP/H</th>
+          <th>Max PP/H</th>
+          <th>%</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img class="npcIcon" src="https://runescape.wiki/images/Menaphos_market_guard_icon.png?bcb77" width="24"> Normal</td>
+          <td id="pphNormalActual">0</td>
+          <td id="pphNormalMax">3000</td>
+          <td id="pphNormalPer">0%</td>
+        </tr>
+        <tr>
+          <td><img src="https://runescape.wiki/images/Master_camouflage_head.png?1a3d1" width="24"> Camo</td>
+          <td id="pphCamoActual">0</td>
+          <td id="pphCamoMax">0</td>
+          <td id="pphCamoPer">0%</td>
+        </tr>
+        <tr>
+          <td><img src="https://runescape.wiki/images/Agility-icon.png?9a56e" width="24"> Agility</td>
+          <td id="pphAgilityActual">0</td>
+          <td id="pphAgilityMax">0</td>
+          <td id="pphAgilityPer">0%</td>
+        </tr>
+        <tr style="font-weight:bold; border-top:2px solid #b18b29;">
+          <td>Total</td>
+          <td id="pphTotalActual">0</td>
+          <td id="pphTotalMax">0</td>
+          <td id="pphTotalPer">0%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- EFFICIENCY -->
+    <div id="Efficiency">
+      <h3 style="margin:0 0 10px; color:#ffd98a;">
+        <img src="https://runescape.wiki/images/Enhanced_Efficient.png?e1c45" alt="Chest" width="26" style="image-rendering:pixelated;">
+        Efficiency
+      </h3>
+
+      <div style="flex:1; min-width:140px;">
+        <div style="display:flex; justify-content:center; align-items:center;">
+          <div id="efficiencyPercent" style="font-weight:800; color:#fff3c0;">0.00%</div>
+          </div>
+
+          <div id="chestBar" style="height:8px; background:#1b1710; border:1px solid #443c2a; margin-top:8px; border-radius:6px; overflow:hidden;">
+            <div id="efficiencyBar" style="width:0%; height:100%; background:linear-gradient(90deg,#e6b83b,#ffd96b); transition:width 800ms cubic-bezier(.2,.9,.3,1);"></div>
+          </div>
+
+          <div id="efficienyText" style="margin-top:8px; font-size:13px; color:#ffebc8;"> 
+            <img src="https://runescape.wiki/images/Skull_%28item%29.png?0df8a" width="18" style="vertical-align:middle; margin-right:4px;"> 
+            Nothing yet...
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- Save box-->
+  <div id="confirmSavePopup"
+     style="
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(30,30,30,0.95);
+        color: white;
+        padding: 20px 30px;
+        border-radius: 10px;
+        font-family: Verdana, sans-serif;
+        font-size: 14px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+        z-index: 9999;
+        display: none;
+        min-width: 250px;
+        text-align: center;
+     ">
+    <div style="margin-bottom: 15px;">
+        <strong>Confirm Save</strong><br>
+        Are you sure you want to save your progress?
+    </div>
+    
+    <!-- Here we display the current data -->
+    <div id="saveDataPreview" style="margin-bottom: 15px; text-align: left;"></div>
+    
+    <button id="confirmSaveYes" 
+            style="
+                margin: 5px;
+                padding: 6px 12px;
+                border: none;
+                border-radius: 6px;
+                background: #4caf50;
+                color: white;
+                font-weight: bold;
+                cursor: pointer;
+            ">Yes</button>
+    <button id="confirmSaveNo" 
+            style="
+                margin: 5px;
+                padding: 6px 12px;
+                border: none;
+                border-radius: 6px;
+                background: #f44336;
+                color: white;
+                font-weight: bold;
+                cursor: pointer;
+            ">No</button>
+</div>
+
+   
+  </body>
+  <script src="scripts/script.js"></script>
+</html>
