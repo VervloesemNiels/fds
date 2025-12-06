@@ -162,7 +162,7 @@ window.setTimeout(() => {
 
             chatInterval = setInterval(() => {
                 readChatbox();
-            }, 200);
+            }, 50);
         }
     }, 1000);
 }, 0);
@@ -246,7 +246,8 @@ function startTimer() {
         updateTimerDisplay(elapsed);
     }, 50);
 
-    startDisplayLoop();
+    startDisplayLoop()
+
 }
 
 function startDisplayLoop() {
@@ -264,7 +265,7 @@ function startDisplayLoop() {
     const elapsed = performance.now() - startTime;
     const firstDelay = msUntilNextTick(elapsed);
 
-    displayInterval = setTimeout(tick, firstDelay);
+    displayInterval = setTimeout(tick, 600);
 }
 
 
@@ -322,7 +323,7 @@ function checkLine(line) {
             fastboiPP++;
             normalPP++;
         }
-        if (line.includes("You pick the")) normalPP++;
+        if (line.includes("You pick the")) normalPP++, updateDisplay();
         if (line.includes("You fail to pick")) failedPP++;
 
         let npcMatch = line.match(/You (?:pick|fail to pick) the (.+?)['’]s pocket/);
@@ -352,8 +353,12 @@ function checkLine(line) {
 
 function updateDisplay() {
     let elapsed = isRunning ? performance.now() - startTime : pausedTime;
+    //let elapsedHours = elapsed / 1000 / 3600;
+
+    
     let completedTicks = Math.floor(elapsed / 600);
     let elapsedHours = (completedTicks * 600) / 1000 / 3600;
+    
 
     totalPP = normalPP + camoPP + fastboiPP;
     let safeNormal = normalPP > 0 ? normalPP : 1;
@@ -374,7 +379,22 @@ function updateDisplay() {
     fastboiPPpercent= (fastboiPP / safeNormal) * 100;
     totalPPPercent  = normalPPPercent + camoPPPercent + fastboiPPpercent;
 
-    efficiencyPercent = (normalPPPerHour / normalMaxPPPerhour) * 100;
+    efficiencyPercent = (normalPPPerHour / normalMaxPPPerhour) * 100
+
+    /*
+    const ticksPerAction = 2;
+    const completedActionSlots = Math.floor(completedTicks / ticksPerAction);
+
+    if (completedActionSlots === 0) {
+        efficiencyPercent = 100;
+    } else {
+        efficiencyPercent = (normalPP / completedActionSlots) * 100;
+    }
+
+    if (efficiencyPercent > 100) efficiencyPercent = 100;
+    */
+
+
 
     lostPickpockets = totalPPMax - totalPPPerhour;
 
@@ -440,6 +460,7 @@ function updateDisplay() {
 
     document.getElementById("efficiencyPercent").textContent = efficiencyPercent.toFixed(2) + '%';
     document.getElementById("efficiencyBar").style.width = efficiencyPercent + '%';
+
 
 }
 
